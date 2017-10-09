@@ -8,7 +8,7 @@
 			var form = $('#assign-item-form');
 			form.parsley().validate();
 			if(form.parsley().isValid()){
-				var url = '<?php echo base_url().''.$getController; ?>/createAssignConsumableItemManager/';
+				var url = '<?php echo base_url().''.$getController; ?>/createAssignedItem/';
 				var postData = new Array();
 				postData.push($('#emp-name').val());
 				postData.push($('#item-name').val());

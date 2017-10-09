@@ -2,6 +2,7 @@
 	$(document).ready(function(){
 
 		$('#date-assign').datetimepicker();
+		$('.selectpicker').selectpicker();
 
 		//return item
 		$('.returnItemBtn').on('click', function(e){
@@ -32,7 +33,7 @@
 			var form = $('#assign-item-form');
 			form.parsley().validate();
 			if(form.parsley().isValid()){
-				var url = '<?php echo base_url().''.$getController; ?>/createAssignNonConsumableItemManager/';
+				var url = '<?php echo base_url().''.$getController; ?>/createAssignedItem/';
 				var postData = new Array();
 				postData.push($('#emp-name').val());
 				postData.push($('#item-name').val());

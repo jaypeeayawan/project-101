@@ -1598,14 +1598,14 @@ class Administrator extends CI_Controller{
 					$this->content .= '<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="create-tab">';
 						$this->content .= form_open('', 'id="assign-item-form" data-parsley-validate class="form-horizontal form-label-left"');
 							$this->content .= form_label('Employee Name<span class="required">*</span> :', 'employee-name');
-							$this->content .= '<select id="emp-name" class="form-control" required>';
+							$this->content .= '<select id="emp-name" class="form-control selectpicker" data-live-search="true" required>';
 								$this->content .= '<option value="">Choose..</option>';
 								foreach ($this->employee_m->getEmployee() as $row) {
 									$this->content .= '<option value="'.$row['employee_id'].'">'.$row['last_name'].', '.$row['first_name'].' '.$row['middle_initial'].'</option>';
 								}
 							$this->content .= '</select>';
 							$this->content .= form_label('Item Name<span class="required">*</span> :', 'item-name');
-							$this->content .= '<select id="item-name" class="form-control" required>';
+							$this->content .= '<select id="item-name" class="form-control selectpicker" data-live-search="true" required>';
 								$this->content .= '<option value="">Choose..</option>';
 								foreach ($this->item_m->getNonConsumableItemForDropdown() as $row) {
 									$this->content .= '<option value="'.$row['item_id'].'">'.$row['category_name'].' - '.$row['item_code'].' ('.$row['item_brand'].')</option>';
@@ -1669,7 +1669,7 @@ class Administrator extends CI_Controller{
 		$employeeId = htmlentities($postData[0]);
 		$itemId = htmlentities($postData[1]);
 		$location = htmlentities($postData[2]);
-		$this->assigneditem_m->createNonConsumableAssignedItem($employeeId,$itemId,$location);
+		$this->assigneditem_m->createAssignedItem($employeeId,$itemId,$location);
 	}
 
 	public function returnAssignedNonConsumableItemManager(){
@@ -1725,14 +1725,14 @@ class Administrator extends CI_Controller{
 					$this->content .= '<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="create-tab">';
 						$this->content .= form_open('', 'id="assign-item-form" data-parsley-validate class="form-horizontal form-label-left"');
 							$this->content .= form_label('Employee Name<span class="required">*</span> :', 'employee-name');
-							$this->content .= '<select id="emp-name" class="form-control" required>';
+							$this->content .= '<select id="emp-name" class="form-control selectpicker" data-live-search="true" required>';
 								$this->content .= '<option value="">Choose..</option>';
 								foreach ($this->employee_m->getEmployee() as $row) {
 									$this->content .= '<option value="'.$row['employee_id'].'">'.$row['last_name'].', '.$row['first_name'].' '.$row['middle_initial'].'</option>';
 								}
 							$this->content .= '</select>';
 							$this->content .= form_label('Item Name<span class="required">*</span> :', 'item-name');
-							$this->content .= '<select id="item-name" class="form-control" required>';
+							$this->content .= '<select id="item-name" class="form-control selectpicker" data-live-search="true" required>';
 								$this->content .= '<option value="">Choose..</option>';
 								foreach ($this->item_m->getConsumableItemForDropdown() as $row) {
 									$this->content .= '<option value="'.$row['item_id'].'">'.$row['category_name'].' - '.$row['item_code'].' ('.$row['item_brand'].')</option>';
@@ -1764,14 +1764,6 @@ class Administrator extends CI_Controller{
 		$data['content'] = $this->content;
 		$this->load->view('index', $data);
 
-	}
-
-	public function createAssignConsumableItemManager(){
-		$postData = $this->input->post('postData');
-		$employeeId = htmlentities($postData[0]);
-		$itemId = htmlentities($postData[1]);
-		$location = htmlentities($postData[2]);
-		$this->assigneditem_m->createAssignedItem($employeeId,$itemId,$location);
 	}
 
 	// stock manager

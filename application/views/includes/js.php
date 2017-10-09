@@ -3,6 +3,8 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>vendors/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script type="text/javascript" src="<?php echo base_url(); ?>vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Bootstrap Select -->
+<script type="text/javascript" src="<?php echo base_url(); ?>vendors/bootstrap-select-1.12.4/dist/js/bootstrap-select.min.js"></script>
 <!-- Input-Number-Spinner-with-jQuery-Bootstrap-Spinner -->
 <script type="text/javascript" src="<?php echo base_url(); ?>vendors/geersch-bootstrap-spinedit/js/bootstrap-spinedit.js"></script>
 <!-- FastClick -->

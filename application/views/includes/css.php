@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendors/bootstrap-daterangepicker/daterangepicker.css">
 <!-- bootstrap-datetimepicker -->
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css">
+<!-- Bootstrap Select -->
+<link rel="stylesheet" href="<?php echo base_url(); ?>vendors/bootstrap-select-1.12.4/dist/css/bootstrap-select.min.css">
 <!-- Input-Number-Spinner-with-jQuery-Bootstrap-Spinner -->
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendors/geersch-bootstrap-spinedit/css/bootstrap-spinedit.css" >
 <!-- Datatables -->

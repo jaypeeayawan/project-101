@@ -62,6 +62,7 @@
 							<li><a><i class="fa fa-cog"></i> System Section <span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
 									<li><a href="<?php echo base_url().''.$getController; ?>/trashedItemManager/">Trashed Items</a></li>
+									<li><a href="<?php echo base_url().''.$getController; ?>/systemLogsManager/">System Logs</a></li>
 								</ul>
 							</li>
 						</ul>

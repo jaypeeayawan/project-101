@@ -17,6 +17,7 @@ class Administrator extends CI_Controller{
 		$this->load->model('item_m');
 		$this->load->model('assigneditem_m');
 		$this->load->model('stock_m');
+		$this->load->model('systemlogs_m');
 	}
 
 	public function index(){
@@ -124,7 +125,7 @@ class Administrator extends CI_Controller{
 		$currentPass = htmlentities($postData[0]);
 		$newPass = htmlentities($postData[1]);
 		$confirmNewPass = htmlentities($postData[2]);
-		$this->user_m->changePassword($personId,$currentPass,$newPass,$confirmNewPass);
+		$this->user_m->changePassword($personId, $currentPass, $newPass, $confirmNewPass);
 	}
 
 	public function logout(){
@@ -185,7 +186,7 @@ class Administrator extends CI_Controller{
 			$this->content .= '<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">';
 				$this->content .= '<span class="count_top"><i class="fa fa-shopping-cart"></i> Assigned Items</span>';
 				$this->content .= '<div class="count">'.$this->dashboard_m->itemAssignedCount().'</div>';
-				$this->content .= '<a href="'.base_url().''.$this->getController().'/assignedItemManager/"><span class="green count_bottom"><i class="fa fa-shopping-cart"></i> Assigned Item Manager</span></a>';
+				$this->content .= '<a href="'.base_url().''.$this->getController().'/assignedNonConsumableItemManager/"><span class="green count_bottom"><i class="fa fa-shopping-cart"></i> Assigned Item Manager</span></a>';
 			$this->content .= '</div>';
 
 			$this->content .= '<div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">';
@@ -474,6 +475,8 @@ class Administrator extends CI_Controller{
 		$departmentCode = htmlentities(strtoupper($postData[0]));
 		$departmentTitle = htmlentities($postData[1]);
 		$this->department_m->createDepartment($departmentCode, $departmentTitle);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new department', date('M d Y g:i a'));
 	}
 
 	public function updateDepartmentManager(){
@@ -482,11 +485,15 @@ class Administrator extends CI_Controller{
 		$departmentCode = htmlentities(strtoupper($postData[0]));
 		$departmentTitle = htmlentities($postData[1]);
 		$this->department_m->updateDepartment($departmentId, $departmentCode, $departmentTitle);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated department', date('M d Y g:i a'));
 	}
 
 	public function deleteDepartmentManager(){
 		$departmentId = $this->uri->segment(3, 0);
 		$this->department_m->deleteDepartment($departmentId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Deleted department', date('M d Y g:i a'));
 	}
 
 	// user manager
@@ -723,8 +730,9 @@ class Administrator extends CI_Controller{
 		$eName = htmlentities($postData[4]);
 		$etitle = htmlentities($postData[5]);
 		$eDept = htmlentities($postData[6]);
-
 		$this->user_m->createNewUser($idNum,$lName,$fName,$mName,$eName,$etitle,$eDept);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new user', date('M d Y g:i a'));
 	}
 
 	public function createUserManager(){
@@ -732,16 +740,22 @@ class Administrator extends CI_Controller{
 		$personId = $postData[0];
 		$idNumber = $postData[1];
 		$this->user_m->createUser($personId,$idNumber);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created user', date('M d Y g:i a'));
 	}
 
 	public function activateUserManager($userId){
 		$userId = $this->uri->segment(3, 0);
 		$this->user_m->activateUser($userId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Activated user', date('M d Y g:i a'));
 	}
 
 	public function deactivateUserManager($userId){
 		$userId = $this->uri->segment(3, 0);
 		$this->user_m->deactivateUser($userId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Deactivated user', date('M d Y g:i a'));
 	}
 
 	// employee manager
@@ -896,6 +910,8 @@ class Administrator extends CI_Controller{
 		$title = htmlentities(ucfirst($postData[5]));
 		$departmentId = htmlentities($postData[6]);
 		$this->employee_m->createEmployee($idNumber, $lastName, $firstName, $middleInitial, $extName, $title, $departmentId);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new employee', date('M d Y g:i a'));
 	}
 
 	public function updateEmployeeManager(){
@@ -910,6 +926,8 @@ class Administrator extends CI_Controller{
 		$departmentId = htmlentities($postData[6]);
 
 		$this->employee_m->updateEmployee($personId, $idNumber, $lastName, $firstName, $middleInitial, $extName, $title, $departmentId);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated employee info', date('M d Y g:i a'));
 	}
 
 	public function deleteEmployeeManager(){ }
@@ -1061,6 +1079,8 @@ class Administrator extends CI_Controller{
 		$supplier_email = htmlentities($postData[2]);
 		$supplier_contact = htmlentities($postData[3]);
 		$this->supplier_m->createSupplier($supplier_name, $supplier_address, $supplier_email, $supplier_contact);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new supplier', date('M d Y g:i a'));
 	}
 
 	public function updateSupplierManager(){
@@ -1071,11 +1091,15 @@ class Administrator extends CI_Controller{
 		$supplier_email = htmlentities($postData[2]);
 		$supplier_contact = htmlentities($postData[3]);
 		$this->supplier_m->updateSupplier($supplier_id, $supplier_name, $supplier_address, $supplier_email, $supplier_contact);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated supplier', date('M d Y g:i a'));
 	}
 
 	public function deleteSupplierManager(){
 		$supplierId = $this->uri->segment(3, 0);
 		$this->supplier_m->deleteSupplier($supplierId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Deleted supplier', date('M d Y g:i a'));
 	}
 
 	// category manager
@@ -1207,6 +1231,8 @@ class Administrator extends CI_Controller{
 	public function createCategoryManager(){
 		$postData = $this->input->post('postData');
 		$this->category_m->createCategory(htmlentities($postData[0]));
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new category', date('M d Y g:i a'));
 	}
 
 	public function updateCategoryManager(){
@@ -1214,11 +1240,15 @@ class Administrator extends CI_Controller{
 		$categoryId = $this->uri->segment(3, 0);
 		$categoryNmae = htmlentities($postData[0]);
 		$this->category_m->updateCategory($categoryId, $categoryNmae);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated category', date('M d Y g:i a'));
 	}
 
 	public function deleteCategoryManager(){
 		$categoryId = $this->uri->segment(3, 0);
 		$this->category_m->deleteCategory($categoryId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Deleted category', date('M d Y g:i a'));
 	}
 
 	// item manager
@@ -1569,12 +1599,16 @@ class Administrator extends CI_Controller{
 		$datePurchased = htmlentities($postData[7]);
 		$isConsumable = htmlentities($postData[8]);
 		$this->item_m->createItem($supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased,$isConsumable);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Created new item', date('M d Y g:i a'));
 	}
 
 	public function addCommentItemManager(){
 		$itemId = $this->uri->segment(3, 0);
 		$postData = htmlentities($this->input->post('postData'));
 		$this->item_m->addComment($itemId, $postData);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Added item comment', date('M d Y g:i a'));
 	}
 
 	public function viewCommentItemManager(){
@@ -1599,11 +1633,15 @@ class Administrator extends CI_Controller{
 		$itemPrice = htmlentities($postData[6]);
 		$datePurchased = htmlentities($postData[7]);
 		$this->item_m->updateItem($itemId,$supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased);
+	
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated item', date('M d Y g:i a'));
 	}
 
 	public function trashItemManager(){
 		$itemId = $this->uri->segment(3, 0);
 		$this->item_m->trashItem($itemId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Trashed item', date('M d Y g:i a'));
 	}
 
 	// assigned non consumable item manager
@@ -1727,12 +1765,16 @@ class Administrator extends CI_Controller{
 		$itemId = htmlentities($postData[1]);
 		$location = htmlentities($postData[2]);
 		$this->assigneditem_m->createAssignedItem($employeeId,$itemId,$location);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Assigned item', date('M d Y g:i a'));
 	}
 
 	public function returnAssignedNonConsumableItemManager(){
 		$assignedItemId = $this->uri->segment(3, 0);
 		$itemId = $this->uri->segment(4, 0);
 		$this->assigneditem_m->returnAssignedItem($assignedItemId,$itemId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Returned item', date('M d Y g:i a'));
 	}
 
 	// assigned consumable item manager
@@ -1961,6 +2003,8 @@ class Administrator extends CI_Controller{
 	public function disposeStockManager(){
 		$stockId = $this->uri->segment(3, 0);
 		$this->stock_m->disposeStock($stockId);
+
+		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Disposed stock', date('M d Y g:i a'));
 	}
 
 	// disposed item manager
@@ -2065,6 +2109,53 @@ class Administrator extends CI_Controller{
 		$this->load->view('index', $data);
 	}
 
+	public function systemLogsManager(){
+		if(!$this->loggedIn()) $this->redirectTo('login');
+
+		$this->title = 'System Logs';
+		$this->getController = $this->getController();
+		$this->pageTitle = heading('System Logs', 3);
+		$this->js = 'systemLogsManager_js';
+		$this->content = '<div class="x_panel">';
+			$this->content .= '<div class="x_content">';
+				$this->content .= '<div class="" role="tabpanel" data-example-id="togglable-tabs">';
+					$this->content .= '<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">';
+						$this->content .= '<li role="presentation" class="active"><a href="#tab_content1" id="list-tab" role="tab" data-toggle="tab" aria-expanded="true">System Logs</a></li>';
+					$this->content .= '</ul>';
+					$this->content .= '<div id="myTabContent" class="tab-content">';
+						$this->content .= '<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="list-tab">';
+							$this->content .= '<table id="datatable-buttons" class="table table-hover table-striped table-bordered">';
+								$this->content .= '<thead>';
+									$this->content .= '<tr>';
+										$this->content .= '<th>Name</th>';
+										$this->content .= '<th>Message</th>';
+										$this->content .= '<th>Date</th>';
+									$this->content .= '</tr>';
+								$this->content .= '</thead>';
+								$this->content .= '<tbody>';
+									foreach ($this->systemlogs_m->getSystemLogs() as $row):
+										$this->content .= '<tr>';
+										$this->content .= '<td>'.$row['name'].'</td>';
+										$this->content .= '<td>'.$row['message'].'</td>';
+										$this->content .= '<td>'.$row['date'].'</td>';
+									endforeach;
+									$this->content .= '</tr>';
+								$this->content .= '</tbody>';
+							$this->content .= '</table>';
+						$this->content .= '</div>';
+					$this->content .= '</div>';
+				$this->content .= '</div>';
+			$this->content .= '</div>';// .x_content
+		$this->content .= '</div>';// .x_panel
+
+		$data['title'] = $this->title;
+		$data['getController'] = $this->getController;
+		$data['pageTitle'] = $this->pageTitle;
+		$data['js'] = $this->js;
+		$data['content'] = $this->content;
+		$this->load->view('index', $data);
+	}
+
 	// private functions
 	private function getController(){
 		return strtolower(get_class());
@@ -2080,6 +2171,13 @@ class Administrator extends CI_Controller{
 
 	private function loggedIn(){
 		return $this->session->userdata(base_url().''.$this->getController().'/loggedIn');
+	}
+
+	private function getUser(){
+		$query = 'SELECT * FROM person WHERE person_id = ?';
+		$sql = $this->db->query($query, array($this->personId()));
+		$user = $sql->row();
+		return '['.$user->id_number.'] '.$user->last_name.', '.$user->first_name.' '.$user->middle_initial.'.';
 	}
 
 	private function itemCodeGenerate($maxlength = 6) {

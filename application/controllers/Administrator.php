@@ -761,7 +761,7 @@ class Administrator extends CI_Controller{
 				$this->content .= '</ul>';
 				$this->content .= '<div id="myTabContent" class="tab-content">';
 					$this->content .= '<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="list-tab">';
-						$this->content .= '<table id="datatable-responsive" class="table table-hover table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">';
+						$this->content .= '<table id="datatable-emp" class="table table-hover table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">';
 							$this->content .= '<thead>';
 								$this->content .= '<tr>';
 									$this->content .= '<th>ID Number</th>';
@@ -771,7 +771,7 @@ class Administrator extends CI_Controller{
 									$this->content .= '<th>Ext. Name</th>';
 									$this->content .= '<th>Title</th>';
 									$this->content .= '<th>Department</th>';
-									//$this->content .= '<th>Actions</th>';
+									$this->content .= '<th>Actions</th>';
 								$this->content .= '</tr>';
 							$this->content .= '</thead>';
 							$this->content .= '<tbody>';
@@ -784,12 +784,11 @@ class Administrator extends CI_Controller{
 									$this->content .= '<td>'.$row['ext_name'].'</td>';
 									$this->content .= '<td>'.$row['title'].'</td>';
 									$this->content .= '<td>'.$row['department_code'].'</td>';
-									/*$this->content .= '<td>';
+									$this->content .= '<td>';
 										$this->content .= '<div class="btn-group">';
-											$this->content .= '<button type="button" id="" class="btn btn-sm btn-primary updateBtn"><i class="fa fa-edit"></i> Edit</button>';
-											$this->content .= '<button type="button" id="" class="btn btn-sm btn-danger deleteBtn"><i class="fa fa-times"></i> Delete</button>';
+											$this->content .= '<button type="button" id="'.$row['person_id'].'_'.$row['id_number'].'_'.$row['last_name'].'_'.$row['first_name'].'_'.$row['middle_initial'].'_'.$row['ext_name'].'_'.$row['title'].'_'.$row['department_code'].'_'.$row['department_id'].'" class="btn btn-xs btn-primary updateBtn"><i class="fa fa-edit"></i> Edit</button>';
 										$this->content .= '</div>';
-									$this->content .= '</td>';*/
+									$this->content .= '</td>';
 								endforeach;
 								$this->content .= '</tr>';
 							$this->content .= '</tbody>';
@@ -830,8 +829,53 @@ class Administrator extends CI_Controller{
 					$this->content .= '</div>';// .tabpane #tab-content2
 				$this->content .= '</div>';// .tab-content
 			$this->content .= '</div>';// #tabpanel
-			$this->content .= '</div>';// .x_content
+			// update modal
+			$this->content .= '<div id="update-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';// Update Modal
+				$this->content .= '<div class="modal-dialog modal-md">';// modal dialog
+					$this->content .= '<div class="modal-content">';// modal content
+						$this->content .= form_open('', 'id="employee-update-form" data-parsley-validate class="form-horizontal form-label-left"');
+							$this->content .= '<div class="modal-header">';// modal header
+								$this->content .= '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+								$this->content .= heading('Update Employee', 4);
+							$this->content .= '</div>';// .modal header
+							$this->content .= '<div class="modal-body">';// modal body
+								$this->content .= form_label('ID Number<span class="required">*</span> :', 'id-number');
+								$this->content .= '<div id="idnumber"></div>';
+								$this->content .= form_label('Last Name<span class="required">*</span> :', 'last-name');
+								$this->content .= '<div id="lastname"></div>';
+								$this->content .= form_label('First Name<span class="required">*</span> :', 'first-name');
+								$this->content .= '<div id="firstname"></div>';
+								$this->content .= form_label('MIddle Initial<span class="required">*</span> :', 'last-name');
+								$this->content .= '<div id="middleinitial"></div>';
+								$this->content .= form_label('Ext Name :', 'ext-name');
+								$this->content .= '<div id="extname"></div>';
+								$this->content .= form_label('Title :', 'title');
+								$this->content .= '<div id="emptitle"></div>';
+								$this->content .= form_label('Department<span class="required">*</span> :', 'emp-department');
+								$this->content .= '<select id="edepartment" class="form-control emp_dept" required>';
+									foreach ($this->department_m->getDepartment() as $row) {
+										$this->content .= '<option value="'.$row['department_id'].'">'.$row['department_code'].' - '.$row['department_title'].'</option>';
+									}
+								$this->content .= '</select>';
+								$this->content .= '<div class="clearfix"></div>';
+							$this->content .= '</div>';// .modal body
+							$this->content .= '<div class="modal-footer">';// modal footer
+								$form_updateBtn_attr = array(
+									'name' => 'updateItem',
+									'type' => 'submit',
+									'class' => 'btn btn-sm btn-primary myFormBtnSubmit',
+									'id' => 'update-item',
+									'content' => '<i class="fa fa-save"></i> Save Changes'
+								);
+								$this->content .= form_button($form_updateBtn_attr);
+								$this->content .= form_button('cancelBtn', 'Cancel', 'class="btn btn-sm btn-default" data-dismiss="modal" aria-hidden="true"');
+							$this->content .= '</div>';// .modal footer
+						$this->content .= form_close();
+					$this->content .= '</div>';// .modal content
+				$this->content .= '</div>';// .modal dialog
+			$this->content .= '</div>';// .Update Modal
 
+			$this->content .= '</div>';// .x_content
 		$this->content .= '</div>';// .x_panel
 
 		$data['title'] = $this->title;
@@ -854,7 +898,19 @@ class Administrator extends CI_Controller{
 		$this->employee_m->createEmployee($idNumber, $lastName, $firstName, $middleInitial, $extName, $title, $departmentId);
 	}
 
-	public function updateEmployeeManager(){ }
+	public function updateEmployeeManager(){
+		$personId = $this->uri->segment(3, 0);
+		$postData = $this->input->post('postData');
+		$idNumber = htmlentities($postData[0]);
+		$lastName = htmlentities(ucfirst($postData[1]));
+		$firstName = htmlentities(ucfirst($postData[2]));
+		$middleInitial = htmlentities(ucfirst(substr($postData[3], 0, 1)));
+		$extName = htmlentities(ucfirst($postData[4]));
+		$title = htmlentities(ucfirst($postData[5]));
+		$departmentId = htmlentities($postData[6]);
+
+		$this->employee_m->updateEmployee($personId, $idNumber, $lastName, $firstName, $middleInitial, $extName, $title, $departmentId);
+	}
 
 	public function deleteEmployeeManager(){ }
 
@@ -910,7 +966,8 @@ class Administrator extends CI_Controller{
 							$this->content .= form_label('Supplier Email<span class="required">*</span> :', 'supplier-email');
 							$this->content .= form_input('supplierEmail', '', 'class="form-control" id="sup-email" data-parsley-type="email" data-parsley-required-message="This field is required" required="required"');
 							$this->content .= form_label('Supplier Contact<span class="required">*</span> :', 'supplier-contact');
-							$this->content .= form_input('supplierContact', '', 'class="form-control" id="sup-contact" data-parsley-type="digits" data-parsley-required-message="This field is required" required="required"');
+							// $this->content .= form_input('supplierContact', '', 'class="form-control" id="sup-contact" data-parsley-type="digits" data-parsley-required-message="This field is required" required="required"');
+							$this->content .= form_input('supplierContact', '', 'class="form-control" id="sup-contact" data-parsley-required-message="This field is required" required="required"');
 							$this->content .= br();
 							$form_saveBtn_attr = array(
 								'name' => 'saveSup',

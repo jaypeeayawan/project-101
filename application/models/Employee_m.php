@@ -42,8 +42,23 @@ class Employee_m extends CI_Model{
 		}
 	}
 
-	public function updateEmployee(){
+	public function updateEmployee($personId, $idNumber, $lastName, $firstName, $middleInitial, $extName, $title, $departmentId){
+		$data = array(
+			'id_number' => $idNumber,
+			'last_name' => $lastName,
+			'first_name' => $firstName,
+			'middle_initial' => $middleInitial,
+			'ext_name' => $extName,
+		);
+		$this->db->where('person_id', $personId);
+		$this->db->update('person', $data);
 
+		$emp = array(
+			'title' => $title,
+			'department_department_id' => $departmentId
+		);
+		$this->db->where('person_person_id', $personId);
+		$this->db->update('employee', $emp);
 	}
 
 	public function deleteEmployee(){

@@ -280,13 +280,13 @@
 		});
 
 		$('table#datatable-item').DataTable({
-    	pageLength : 25,
-    	"columnDefs" : [
-        { "searchable": false, "targets": [4,5,6]},
-        { "orderable": false, "targets": [4,5,6]}
+	    	pageLength : 25,
+	    	"columnDefs" : [
+		        { "searchable": false, "targets": [4,5,6]},
+		        { "orderable": false, "targets": [4,5,6]}
 			],
-	  	"order": [[ 0, "asc" ]],
-	  	responsive: false
+		  	"order": [[ 0, "asc" ]],
+		  	responsive: false
 		});
 
 	});

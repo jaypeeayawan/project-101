@@ -16,7 +16,7 @@
 			$('#sup_name').html($('<input type="text" id="sup-name" class="form-control" value="'+supplier_name+'" data-parsley-required-message="This field is required" required="required">'));
 			$('#sup_address').html($('<input type="text" id="sup-address" class="form-control" value="'+supplier_address+'" data-parsley-required-message="This field is required" required="required">'));
 			$('#sup_email').html($('<input type="text" id="sup-email" class="form-control" value="'+supplier_email+'" data-parsley-type="email" data-parsley-type="email" data-parsley-required-message="This field is required" required="required">'));
-			$('#sup_contact').html($('<input type="text" id="sup-contact" class="form-control" value="'+supplier_contact+'" data-parsley-type="digits" data-parsley-required-message="This field is required" required="required">'));
+			$('#sup_contact').html($('<input type="text" id="sup-contact" class="form-control" value="'+supplier_contact+'" data-parsley-required-message="This field is required" required="required">'));
 
 			$('#sup-update-form .myFormBtnSubmit').on('click', function(e){
 				var form = $('#sup-update-form');

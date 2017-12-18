@@ -33,3 +33,5 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendors/pnotify/dist/pnotify.nonblock.css">
 <!-- Custom Theme Style -->
 <link rel="stylesheet" href="<?php echo base_url(); ?>build/css/custom.min.css">
+<!-- Style css -->
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css">

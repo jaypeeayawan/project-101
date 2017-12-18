@@ -148,7 +148,7 @@ class Item_m extends CI_Model{
 		echo json_encode($arr);		
 	}
 
-	public function updateItem($itemId,$supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased){
+	public function updateItem($itemId,$supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased,$isConsumable){
 		$data = array(
 			'supplier_supplier_id' => $supplierId,
 			'category_category_id' => $categoryId,
@@ -161,6 +161,10 @@ class Item_m extends CI_Model{
 		);
 		$this->db->where('item_id', $itemId);
 		$this->db->update('item', $data);
+
+		$this->db->set('is_consumable', $isConsumable);
+		$this->db->where('item_item_id', $itemId);
+		$this->db->update('stock');
 	}
 
 	public function trashItem($itemId){

@@ -169,9 +169,9 @@
 			var orNumber = ids[8];
 			var itemUnitPrice = ids[9];
 			var datePurchased = ids[10];
+			var isConsumable = ids[11];
 
 			$('#update-modal').modal({ show: 'show', backdrop: 'static' });
-
 			$('select#item-sup').prepend('<option value="'+supplierId+'" selected="selected">'+supplierName+'</option>');
 			$('select#item-cat').prepend('<option value="'+categoryId+'" selected="selected">'+categoryName+'</option>');
 			$('#item_code').html($('<input type="text" id="itemCode" class="form-control" value="'+itemCode+'" data-parsley-required-message="This field is required" required="required">'));
@@ -180,10 +180,13 @@
 			$('#or_number').html($('<input type="text" id="orNumber" class="form-control" value="'+orNumber+'" data-parsley-required-message="This field is required" required="required">'));
 			$('#item_unit_price').html($('<input type="text" id="itemUnitPrice" class="form-control" value="'+itemUnitPrice+'" data-parsley-required-message="This field is required" required="required">'));
 			$('#date_purchased').html($('<input type="text" id="itemPurchased" class="form-control" value="'+datePurchased+'" data-parsley-required-message="This field is required" required="required">'));
-
+			
 			$('#itemPurchased').datetimepicker();
-
 			$('#item-update-form .myFormBtnSubmit').on('click', function(){
+				
+				e.preventDefault();
+				e.stopPropagation();
+				
 				var form = $('#item-update-form');
 				form.parsley().validate();
 				if(form.parsley().isValid()){
@@ -197,7 +200,10 @@
 					postData.push($('#orNumber').val());
 					postData.push($('#itemUnitPrice').val());
 					postData.push($('#itemPurchased').val());
-					$.post(url, { postData:postData }, function(){
+
+					$('input[name="optconsumable"]').is(':checked') ? postData.push($('input[name="optconsumable"]:checked').val()) : postData.push(isConsumable);
+					
+					$.post(url, { postData:postData }, function(data){
 						window.location.reload();
 					});
 				}
@@ -237,16 +243,6 @@
 			e.stopPropagation();
 		});
 
-		//$('.inputConsumable').hide();
-		$('input[name="is-consumable"]').on('click', function(){
-			alert();
-			/*if($(this).prop('checked')){
-				$('.inputConsumable').show();
-			}else{
-				$('.inputConsumable').hide();
-			}*/
-		});
-
 		//create
 		$('#item-create-form .myFormBtnSubmit').on('click', function(e){
 			var form = $('#item-create-form');
@@ -263,7 +259,7 @@
 				postData.push($('#item-unit-price').val());
 				postData.push($('#date-purchased').val());
 
-				($('#is-consumable').is(':checked') ? postData.push(1): postData.push(0));
+				postData.push($('input[name="optconsumable"]:checked').val());
 
 				$.post(url,{ postData:postData }, function(){
 					window.location.reload();

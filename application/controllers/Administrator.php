@@ -1298,7 +1298,7 @@ class Administrator extends CI_Controller{
 										$this->content .= '<a id="'.$row['item_id'].'_'.$row['supplier_id'].'_'.$row['supplier_name'].'_'.$row['category_id'].'_'.$row['category_name'].'_'.$row['item_code'].'_'.$row['item_brand'].'_'.$row['item_description'].'_'.$row['or_number'].'_'.$row['item_unit_price'].'_'.$row['date_purchased'].'" class="btn btn-success btn-xs informationBtn"><i class="fa fa-folder"></i> Info </a>';
 									$this->content .= '</td>';
 									$this->content .= '<td>';
-										$this->content .= '<a id="'.$row['item_id'].'_'.$row['supplier_id'].'_'.$row['supplier_name'].'_'.$row['category_id'].'_'.$row['category_name'].'_'.$row['item_code'].'_'.$row['item_brand'].'_'.$row['item_description'].'_'.$row['or_number'].'_'.$row['item_unit_price'].'_'.$row['date_purchased'].'" class="btn btn-info btn-xs updateBtn"><i class="fa fa-pencil"></i> Edit </a>';
+										$this->content .= '<a id="'.$row['item_id'].'_'.$row['supplier_id'].'_'.$row['supplier_name'].'_'.$row['category_id'].'_'.$row['category_name'].'_'.$row['item_code'].'_'.$row['item_brand'].'_'.$row['item_description'].'_'.$row['or_number'].'_'.$row['item_unit_price'].'_'.$row['date_purchased'].'_'.$row['is_consumable'].'" class="btn btn-info btn-xs updateBtn"><i class="fa fa-pencil"></i> Edit </a>';
 										$this->content .= '<a id="'.$row['item_id'].'_'.$row['supplier_id'].'_'.$row['supplier_name'].'_'.$row['category_id'].'_'.$row['category_name'].'_'.$row['item_code'].'_'.$row['item_brand'].'_'.$row['item_description'].'_'.$row['or_number'].'_'.$row['item_unit_price'].'_'.$row['date_purchased'].'" class="btn btn-danger btn-xs deleteBtn"><i class="fa fa-trash-o"></i> Trash </a>';
 									$this->content .= '</td>';
 								endforeach;
@@ -1360,18 +1360,16 @@ class Administrator extends CI_Controller{
 									'data-parsley-required-message' => 'This field is required',
 									'data-parsley-type' => 'digits'
 								);
-								$this->content .= form_input($price_input_attr);
+							$this->content .= form_input($price_input_attr);
 							$this->content .= '</div>';
 							$this->content .= '<div class="col-md-6 col-sm-6 col-xs-12 form-group">';
-							$this->content .= form_label('Is Consumable?<span class="required">*</span> :', 'is-consumable');
-							$this->content .= '<p>';
-							$checkbox_attr = array(
-								'name' => 'is-consumable',
-								'class' => 'flat isConsumableChecbox',
-								'id' => 'is-consumable'
-							);
-							$this->content .= form_checkbox($checkbox_attr).'Consumable';
-							$this->content .= '</p>';
+								$this->content .= form_label('Is Consumable / Non-Consumable?<span class="required">*</span> :', 'is-consumable');
+								$this->content .= '<div class="radio">';
+									$this->content .= '<label><input class="is-consumable" type="radio" name="optconsumable" value="1">'.nbs().'Consumable</label>';
+								$this->content .= '</div>';			
+								$this->content .= '<div class="radio">';
+									$this->content .= '<label><input class="is-consumable" type="radio" name="optconsumable" value="0">'.nbs().'Non-Consumable</label>';
+								$this->content .= '</div>';							
 							$this->content .= '</div>';
 							$this->content .= br(2);
 							$this->content .= '<div class="col-md-12 col-sm-12 col-xs-12 form-group">';
@@ -1513,17 +1511,13 @@ class Administrator extends CI_Controller{
 									$this->content .= form_label('Item ID<span class="required">*</span> :', 'item-code');
 									$this->content .= '<div id="item_code"></div>';
 								$this->content .= '</div>';
-								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-12 form-group">';
-									$this->content .= form_label('Item Brand<span class="required">*</span> :', 'item-brand');
-									$this->content .= '<div id="item_brand"></div>';
-								$this->content .= '</div>';
 								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
 									$this->content .= form_label('OR Number<span class="required">*</span> :', 'or-number');
 									$this->content .= '<div id="or_number"></div>';
 								$this->content .= '</div>';
-								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
-									$this->content .= form_label('Item Unit Price<span class="required">*</span> :', 'item-unit-price');
-									$this->content .= '<div id="item_unit_price"></div>';
+								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-12 form-group">';
+									$this->content .= form_label('Item Brand<span class="required">*</span> :', 'item-brand');
+									$this->content .= '<div id="item_brand"></div>';
 								$this->content .= '</div>';
 								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
 									$this->content .= form_label('Date Purchased<span class="required">*</span> :', 'date-purchased');
@@ -1532,6 +1526,19 @@ class Administrator extends CI_Controller{
 								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
 									$this->content .= form_label('Item Description<span class="required">*</span> :', 'item-description');
 									$this->content .= '<div id="item_description"></div>';
+								$this->content .= '</div>';
+								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
+									$this->content .= form_label('Item Unit Price<span class="required">*</span> :', 'item-unit-price');
+									$this->content .= '<div id="item_unit_price"></div>';
+								$this->content .= '</div>';
+								$this->content .= '<div class="col-md-6 col-sm-6 col-xs-6 form-group">';
+									$this->content .= form_label('Is Consumable / Non-Consumable?<span class="required">*</span> :', 'is-consumable');
+									$this->content .= '<div class="radio">';
+										$this->content .= '<label><input class="is-consumable" type="radio" name="optconsumable" value="1">'.nbs().'Consumable</label>';
+									$this->content .= '</div>';			
+									$this->content .= '<div class="radio">';
+										$this->content .= '<label><input class="is-consumable" type="radio" name="optconsumable" value="0">'.nbs().'Non-Consumable</label>';
+									$this->content .= '</div>';							
 								$this->content .= '</div>';
 								$this->content .= '<div class="clearfix"></div>';
 							$this->content .= '</div>';// .modal body
@@ -1632,7 +1639,8 @@ class Administrator extends CI_Controller{
 		$orNumber = htmlentities($postData[5]);
 		$itemPrice = htmlentities($postData[6]);
 		$datePurchased = htmlentities($postData[7]);
-		$this->item_m->updateItem($itemId,$supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased);
+		$isConsumable = htmlentities($postData[8]);
+		$this->item_m->updateItem($itemId,$supplierId,$categoryId,$itemCode,$itemBrand,$itemDescription,$orNumber,$itemPrice,$datePurchased,$isConsumable);
 	
 		$this->systemlogs_m->createSystemLogs($this->getUser(), 'Updated item', date('M d Y g:i a'));
 	}

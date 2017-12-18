@@ -2,7 +2,6 @@
 	$(document).ready(function(){
 
 		$('#date-purchased').datetimepicker({  });
-
 		//item add comments
 		$('.commentsAddBtn').on('click', function(e){
 			var itemId = new String($(this).attr('id'));
@@ -200,8 +199,8 @@
 					postData.push($('#orNumber').val());
 					postData.push($('#itemUnitPrice').val());
 					postData.push($('#itemPurchased').val());
-
-					$('input[name="optconsumable"]').is(':checked') ? postData.push($('input[name="optconsumable"]:checked').val()) : postData.push(isConsumable);
+					
+					$('input:radio[name="optconsumable"]').is(':checked') ? postData.push($('input:radio[name="optconsumable"]:checked').val()) : postData.push(isConsumable);
 					
 					$.post(url, { postData:postData }, function(data){
 						window.location.reload();
